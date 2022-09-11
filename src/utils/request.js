@@ -11,7 +11,7 @@ const request = axios.create({
 
 // 请求拦截器：请求做些事情
 // config是每一次请求的配置对象
-axios.interceptors.request.use(
+request.interceptors.request.use(
   function (config) {
     // 每一次发请求都会执行
     // 在发送请求之前做些什么
