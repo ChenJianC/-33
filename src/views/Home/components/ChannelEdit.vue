@@ -17,7 +17,7 @@
     <div class="my-pannel">
       <van-grid gutter="10" :border="false">
         <van-grid-item
-          v-for="item in myChannels"
+          v-for="(item, index) in myChannels"
           :class="{ active: item.name === '推荐' }"
           :key="item.id"
           :text="item.name"
@@ -38,6 +38,7 @@
           :key="item.id"
           :text="item.name"
           icon="plus"
+          @click="$emit('add-channel', item)"
         >
         </van-grid-item>
       </van-grid>
@@ -58,9 +59,6 @@ export default {
       allChannels: []
     }
   },
-  created() {
-    this.getAllChannels()
-  },
   computed: {
     recommendChannels() {
       return this.allChannels.filter((allChannelItem) => {
@@ -70,14 +68,17 @@ export default {
       })
     }
   },
+  created() {
+    this.getAllChannels()
+  },
   methods: {
     async getAllChannels() {
       const { data } = await getAllChannelsAPI()
       this.allChannels = data.data.channels
     },
-    handleMyChannel({ name }, index) {
+    handleMyChannel({ name, id }, index) {
       if (this.isEdit && name !== '推荐') {
-        console.log('删除频道', name)
+        this.$emit('del-channel', id)
       } else {
         // 1.关闭弹窗
         // 2.切换频道
